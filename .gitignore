@@ -1,0 +1,63 @@
+# =========================
+# 🐍 Python
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc.*
+*.py,cover
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# =========================
+# 🧠 AI / ML Models (IMPORTANT)
+# =========================
+models/
+*.pt
+*.pth
+*.onnx
+*.h5
+
+# =========================
+# 📁 Dataset / Videos (IMPORTANT)
+# =========================
+dataset/
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# =========================
+# 📊 Output files
+# =========================
+results/
+*.csv
+
+# =========================
+# 💻 VS Code
+# =========================
+.vscode/
+
+# =========================
+# 🖥️ OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# 📦 Misc
+# =========================
+*.zip
+*.tar
+*.gz
