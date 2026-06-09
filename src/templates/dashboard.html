@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Neon Smart Traffic Dashboard</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at top, #0a0f2c, #020412);
+    color: white;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px;
+    font-size: 28px;
+    border-bottom: 1px solid #00ffff33;
+}
+
+.status {
+    color: #00ffcc;
+}
+
+/* GRID LAYOUT */
+.main {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* CARD */
+.card {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid #00ffff44;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 0 20px #00ffff22;
+    transition: 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 0 30px #00ffff;
+    transform: scale(1.02);
+}
+
+/* LEFT PANEL */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* RIGHT PANEL */
+.right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* VALUE */
+.value {
+    font-size: 26px;
+    margin-top: 10px;
+}
+
+/* SIGNAL COLORS */
+.green { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
+.red { color: #ff4d4d; text-shadow: 0 0 10px #ff4d4d; }
+
+/* GRAPH BOX */
+.graph {
+    grid-column: span 1;
+}
+
+/* CENTER BIG GRAPH */
+.center {
+    grid-column: span 1;
+    text-align: center;
+}
+
+/* GLOW TITLE */
+.title {
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+let chart;
+
+// -------- LIVE DATA --------
+async function loadData() {
+    const res = await fetch("/data");
+    const data = await res.json();
+
+    document.getElementById("time").innerText = data.time;
+    document.getElementById("laneA").innerText = data.laneA;
+    document.getElementById("laneB").innerText = data.laneB;
+    document.getElementById("countdown").innerText = data.countdown + " sec";
+
+    let signal = document.getElementById("signal");
+
+    signal.innerText = data.signal;
+
+    if (data.signal.includes("A")) {
+        signal.className = "value green";
+    } else {
+        signal.className = "value red";
+    }
+}
+
+// -------- GRAPH --------
+async function loadGraph() {
+    const res = await fetch("/history");
+    const data = await res.json();
+
+    const ctx = document.getElementById("trafficChart").getContext("2d");
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: data.times,
+            datasets: [
+                {
+                    label: "Lane A",
+                    data: data.laneA,
+                    borderColor: "#00ffff",
+                    borderWidth: 3,
+                    tension: 0.4
+                },
+                {
+                    label: "Lane B",
+                    data: data.laneB,
+                    borderColor: "#ff4d9d",
+                    borderWidth: 3,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: { color: "white" }
+                }
+            },
+            scales: {
+                x: { ticks: { color: "#00ffff" } },
+                y: { ticks: { color: "#00ffff" } }
+            }
+        }
+    });
+}
+
+setInterval(loadData, 1000);
+setInterval(loadGraph, 2000);
+</script>
+
+</head>
+
+<body onload="loadData(); loadGraph();">
+
+<!-- HEADER -->
+<div class="header">
+    🚦 <span class="title">Smart Traffic Dashboard</span>
+    <div class="status">● ONLINE</div>
+</div>
+
+<div class="main">
+
+<!-- LEFT PANEL -->
+<div class="sidebar">
+
+    <div class="card">
+        <h3>🕒 Time</h3>
+        <div id="time" class="value">--</div>
+    </div>
+
+    <div class="card">
+        <h3>🚗 Lane A</h3>
+        <div id="laneA" class="value">0</div>
+    </div>
+
+     <div class="card">
+        <h3>🚗 Lane B</h3>
+        <div id="laneB" class="value">0</div>
+    </div>
+
+</div>
+
+<!-- CENTER GRAPH -->
+<div class="card center">
+    <h2 class="title">Traffic Density</h2>
+    <canvas id="trafficChart"></canvas>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right">
+
+    <div class="card">
+        <h3>🚦 Signal</h3>
+        <div id="signal" class="value">--</div>
+    </div>
+
+    <div class="card">
+        <h3>⏳ Countdown</h3>
+        <div id="countdown" class="value">0 sec</div>
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

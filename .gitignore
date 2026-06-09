@@ -23,7 +23,7 @@ ENV/
 # =========================
 # 🧠 AI / ML Models (IMPORTANT)
 # =========================
-models/
+src/models/
 *.pt
 *.pth
 *.onnx
