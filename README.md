@@ -105,23 +105,17 @@ SmartTrafficAI/
 
 ## 📸 Screenshots
 
-### Vehicle Detection
+## 🚗 Vehicle Detection
 
-Add screenshot here:
+![Vehicle Detection](screenshots/vehicle_detection.png)
 
-screenshots/vehicle_detection.png
+## 📊 Dashboard
 
-### Dashboard
+![Dashboard](screenshots/dashboard.png)
 
-Add screenshot here:
+## 📈 Analytics Output
 
-screenshots/dashboard.png
-
-### Analytics Output
-
-Add screenshot here:
-
-screenshots/analytics_output.png
+![Analytics Output](screenshots/analytics_output.png)
 
 ---
 
